@@ -69,7 +69,7 @@ public class LibroDto {
 	//Métodos
 	@Override
 	public String toString() {
-		return "\n--- Datos del libro ---\nid_libro: " + idLibro + "\nTitulo: " + titulo + "\nAutor: " + autor + "\nISBN: " + isbn
+		return "\n--- Datos del libro con id "+idLibro+" ---\nidLibro: " + idLibro + "\nTitulo: " + titulo + "\nAutor: " + autor + "\nISBN: " + isbn
 				+ "\nEdición: " + edicion;
 	}
 }
