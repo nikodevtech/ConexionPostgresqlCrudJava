@@ -23,7 +23,7 @@ public class Principal {
 		MenuInterface menuInterface = new MenuImpl();
 		ConexionBbddInterface conexionBbdd = new ConexionBbddImpl();
 		OperacionesBbddInterface operacionBbdd = new OperacionesBbddImpl();
-		List<LibroDto> listalibros = new ArrayList<LibroDto>();
+		List<LibroDto> listaLibros = new ArrayList<LibroDto>();
 		Connection conexion = null;
 
 		do {
@@ -38,16 +38,20 @@ public class Principal {
 					switch (opcion) {
 					
 					case 1:
-
+						operacionBbdd.createLibro(conexion, listaLibros);
 						break;
 					case 2:
-						operacionBbdd.readLibro(conexion);
+						operacionBbdd.readLibro(conexion, listaLibros);
 						break;
 					case 3:
+						operacionBbdd.updateLibro(conexion,listaLibros);
 						break;
 					case 4:
 						break;
 					case 0:
+						cerrarMenu = true;
+						break;
+					case -1:
 						cerrarMenu = true;
 						break;
 					}

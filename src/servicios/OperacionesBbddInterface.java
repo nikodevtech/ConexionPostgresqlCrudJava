@@ -12,25 +12,25 @@ public interface OperacionesBbddInterface {
 	/**
 	 * Método que realiza el SELECT para ver los registros de los libros
 	 * @param conexionGenerada
-	 * @return Lista de los LibroDTO
+	 * @param listaLibros actuales
 	 */
-	public List<LibroDto> readLibro(Connection conexionGenerada);
+	public void readLibro(Connection conexionGenerada, List<LibroDto>listaLibros);
 	/**
 	 * Método que realiza el INSERT INTO para realizar un nuevo registro de libro
 	 * @param conexionGenerada
-	 * @return Lista de los LibroDTO
+	 *  @param listaLibros actuales
 	 */
-	public List<LibroDto> createLibro(Connection conexionGenerada);
+	public void createLibro(Connection conexionGenerada, List<LibroDto>listaLibros);
 	/**
 	 * Método que realiza el UPDATE para modificar un registro de libro
 	 * @param conexionGenerada
-	 * @return Lista de los LibroDTO
+	 * @param listaLibros actuales
 	 */
-	public List<LibroDto> updateLibro(Connection conexionGenerada);
+	public void updateLibro(Connection conexionGenerada, List<LibroDto>listaLibros);
 	/**
 	 * Método que realiza el DELETE para elinminar un registro de libro
 	 * @param conexionGenerada
-	 * @return Lista de los LibroDTO
+	 * @param listaLibros actuales
 	 */
 	public List<LibroDto> deleteLibro(Connection conexionGenerada);
 }

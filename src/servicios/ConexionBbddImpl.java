@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * Clase que implementa la interfaz de la conexión a la BBDD
+ * Clase que implementa la interfaz que establece y configura la conexión a la BBDD definiendo el detalle
  */
 public class ConexionBbddImpl implements ConexionBbddInterface {
 

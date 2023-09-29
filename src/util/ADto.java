@@ -8,7 +8,7 @@ import java.util.List;
 import dto.LibroDto;
 
 /**
- * Clase util para pasar a DTO contiene los métodos que se usan frecuentemente
+ * Clase ADTO del paquete util cuya función es pasar los datos a Dto
  */
 public class ADto {
 

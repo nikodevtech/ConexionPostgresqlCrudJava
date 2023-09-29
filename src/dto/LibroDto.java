@@ -25,6 +25,13 @@ public class LibroDto {
 		super();
 	}
 	
+	public LibroDto(String titulo, String autor, String isbn, int edicion) {
+		this.titulo = titulo;
+		this.autor = autor;
+		this.isbn = isbn;
+		this.edicion = edicion;
+	}
+	
 	//Getters y setters
 	public long getIdLibro() {
 		return idLibro;
