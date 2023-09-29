@@ -14,7 +14,7 @@ public class MenuImpl implements MenuInterface{
 	public int mostrarMenu() {
 		try {
 		return Integer.parseInt(JOptionPane.showInputDialog(
-				"\n--- MENU ---\n" + "\n1. Crear libro\n" + "2. Leer libro\n3. Actualizar libro"
+				"\n--- MENU ---\n" + "\n1. Registrar libro\n" + "2. Mostrar libro\n3. Modificar libro"
 						+ "\n4. Eliminar libro\n0. Salir\n" + "\nIntroduce la opción deseada: "));
 		}catch(NumberFormatException nfe) {
 			System.out.println("**ERROR MenuImpl MostrarMenu** Error con el tipo de dato al convertir a string: " + nfe);

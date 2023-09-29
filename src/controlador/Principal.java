@@ -52,7 +52,7 @@ public class Principal {
 						cerrarMenu = true;
 						break;
 					case -1:
-						cerrarMenu = true;
+						cerrarMenu = true; //Boton cancelar en el menu
 						break;
 					}
 				}

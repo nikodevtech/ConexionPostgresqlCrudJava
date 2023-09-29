@@ -61,7 +61,9 @@ public class ConexionBbddImpl implements ConexionBbddInterface {
 		Properties propiedadesConexionBbdd = new Properties();
 		try {
 			propiedadesConexionBbdd.load(new FileInputStream(new File(
-					"C:\\Users\\Puesto9\\Desktop\\DWS Java\\ConexionPostgresqlCrudJava\\src\\util\\conexion_postgresql.properties")));
+					//"D:\\Descargas\\DWS Java workspace\\ConexionPostgresqlCrudJava\\src\\util\\conexion_postgresql.properties"
+					//"C:\\Users\\Puesto9\\Desktop\\DWS Java\\ConexionPostgresqlCrudJava\\src\\util\\conexion_postgresql.properties"
+					"D:\\Descargas\\DWS Java workspace\\ConexionPostgresqlCrudJava\\src\\util\\conexion_postgresql.properties")));
 			usuario = propiedadesConexionBbdd.getProperty("user");
 			contraseña = propiedadesConexionBbdd.getProperty("pass");
 			puerto = propiedadesConexionBbdd.getProperty("port");
