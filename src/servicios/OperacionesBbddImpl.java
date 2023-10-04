@@ -176,12 +176,12 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 		mostarTodosLosLibros(listaLibros); // Muestra libros actuales para que pueda identificar cual modificar
 		boolean libroAmodificarEsValido = false;
 		Integer idLibroAmodificar;
-		
+
 		try {
 			idLibroAmodificar = Integer
 					.parseInt(JOptionPane.showInputDialog("Introduce el id del libro a modificar: "));
 			libroAmodificarEsValido = compruebaIdLibro(listaLibros, idLibroAmodificar);
-			
+
 			if (libroAmodificarEsValido) {
 				PreparedStatement consultaPreparada = null;
 				String campoAmodificar = JOptionPane
@@ -272,12 +272,11 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 				String queryEliminar = "DELETE FROM gbp_almacen.gbp_alm_cat_libros WHERE id_libro = ?";
 				consultaPreparada = conexionGenerada.prepareStatement(queryEliminar);
 				consultaPreparada.setInt(1, idLibroAeliminar);
-				int borrado = consultaPreparada.executeUpdate();
-				if (borrado > 0) {
-					JOptionPane.showMessageDialog(null, "Registro eliminado correctamente");
-				} else {
-					JOptionPane.showMessageDialog(null, "No se ha eliminado nada");
-				}
+				consultaPreparada.executeUpdate();
+				JOptionPane.showMessageDialog(null, "Registro eliminado correctamente");
+
+			} else {
+				JOptionPane.showMessageDialog(null, "No se ha eliminado nada");
 			}
 		} catch (SQLException sqle) {
 			System.out.println(

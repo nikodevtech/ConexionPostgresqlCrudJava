@@ -18,7 +18,7 @@ public class ConexionBbddImpl implements ConexionBbddInterface {
 		// url, user y pass obtenido del .properties 
 		String[] parametrosConexion = configuracionConexion();
 
-		// Se controla que los parámetros de conexión se completen correctamente para establecer conex
+		// Se controla que los parámetros de conexión se completen correctamente para que se establezca
 		if (!parametrosConexion[2].isEmpty()) { 
 			try {
 				Class.forName("org.postgresql.Driver");
@@ -51,7 +51,7 @@ public class ConexionBbddImpl implements ConexionBbddInterface {
 	}
 
 	/**
-	 * Obtiene los datos url, user y pass obtenido del fichero .properties 
+	 * Obtiene los datos para la conexión (url, user y pass) obtenido del fichero .properties 
 	 * @return un array con los datos necesarios para establecer la conexion a la bbdd 
 	 */
 	private String[] configuracionConexion() {
@@ -61,8 +61,7 @@ public class ConexionBbddImpl implements ConexionBbddInterface {
 		Properties propiedadesConexionBbdd = new Properties();
 		try {
 			propiedadesConexionBbdd.load(new FileInputStream(new File(
-					//"D:\\Descargas\\DWS Java workspace\\ConexionPostgresqlCrudJava\\src\\util\\conexion_postgresql.properties"
-					//"C:\\Users\\Puesto9\\Desktop\\DWS Java\\ConexionPostgresqlCrudJava\\src\\util\\conexion_postgresql.properties"
+					//ruta casa --> "D:\\Descargas\\DWS Java workspace\\ConexionPostgresqlCrudJava\\src\\util\\conexion_postgresql.properties"
 					"C:\\Users\\Puesto9\\Desktop\\DWS Java\\ConexionPostgresqlCrudJava\\src\\util\\conexion_postgresql.properties")));
 			usuario = propiedadesConexionBbdd.getProperty("user");
 			contraseña = propiedadesConexionBbdd.getProperty("pass");
