@@ -8,7 +8,7 @@ import java.util.List;
 import dto.LibroDto;
 
 /**
- * Clase ADTO del paquete util cuya función es pasar los datos a Dto
+ * Clase ADTO del paquete util cuya función es pasar los datos del libro a Dto
  */
 public class ADto {
 
@@ -20,18 +20,15 @@ public class ADto {
 	public List<LibroDto> pasarResultSetALibrosDto(ResultSet resultadoConsulta) {
 
 		List<LibroDto> listaLibros = new ArrayList<LibroDto>();
-
-		// Leemos el resultado de la consulta hasta que no queden filas
 		try {
-			while (resultadoConsulta.next()) {
+			while (resultadoConsulta.next()) { // Leemos el resultado de la consulta hasta que no queden filas
 
 				listaLibros.add(new LibroDto(resultadoConsulta.getLong("id_libro"),
 						resultadoConsulta.getString("titulo"), resultadoConsulta.getString("autor"),
 						resultadoConsulta.getString("isbn"), resultadoConsulta.getInt("edicion")));
 			}
 
-			int i = listaLibros.size();
-			System.out.println("**INFO ConvertirADto resultsALibrosDto** Número libros: " + i);
+			System.out.println("**INFO ConvertirADto resultsALibrosDto** Número libros: " + listaLibros.size());
 
 		} catch (SQLException e) {
 			System.out.println("**ERROR ADto pasarResultSetALibrosDto** Error al pasar el resultset a lista de LibroDto" + e);

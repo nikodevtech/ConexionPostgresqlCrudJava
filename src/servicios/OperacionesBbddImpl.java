@@ -44,30 +44,31 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 						"Quiere que se muestren todos los libros o mostrar por id (Y = todos / Cualquier tecla = por id)? : ")
 						.toUpperCase();
 				if (mostrarTodosLibros.charAt(0) == 'Y') {
-					mostarTodosLosLibros(listaLibros);			
+					mostarTodosLosLibros(listaLibros);
 				} else {
 					Integer idLibroAmostrar = Integer
 							.parseInt(JOptionPane.showInputDialog("Introduce el id del libro a mostrar: "));
 					mostrarLibroPorID(listaLibros, idLibroAmostrar);
 				}
 			}
-			
+
 			// Liberando los recursos
 			resultadoConsulta.close();
 			declaracionSQL.close();
 			conexionGenerada.close();
-			System.out.println("**INFO OperacionesBbddImpl readLibros** Cierre conexión a bbdd, statement y resulset");
-
+			System.out.println("**INFO OperacionesBbddImpl readLibro** Cierre conexión a bbdd, statement y resulset");
 
 		} catch (SQLException sqle) {
 			System.out.println(
-					"**ERROR OperacionesBbddImpl readLibros** Error generando o ejecutando la declaracionSQL: " + sqle);
+					"**ERROR OperacionesBbddImpl readLibro** Error generando o ejecutando la declaracionSQL: " + sqle);
 			sqle.printStackTrace();
 		} catch (HeadlessException he) {
-			System.out.println("**ERROR OperacionesBbddImpl createLibros** Error, el usuario no dispone de interfaz gráfica: " + he.getMessage());
+			System.out.println(
+					"**ERROR OperacionesBbddImpl readLibro** Error, el usuario no dispone de interfaz gráfica: "
+							+ he.getMessage());
 			he.printStackTrace();
 		} catch (NumberFormatException nfe) {
-			System.out.println("**ERROR OperacionesBbddImpl createLibros** Error al convertir una edición a entero: "
+			System.out.println("**ERROR OperacionesBbddImpl readLibro** Error al convertir una edición a entero: "
 					+ nfe.getMessage());
 			nfe.printStackTrace();
 		}
@@ -75,6 +76,7 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 
 	/**
 	 * Itera la lista con los libros y los muestra todos al usuario
+	 * 
 	 * @param listaLibros
 	 */
 	private void mostarTodosLosLibros(List<LibroDto> listaLibros) {
@@ -84,8 +86,8 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 	}
 
 	/**
-	 * Itera la lista con los libros y muestra al usuario el libro con id que ya
-	 * introdujos
+	 * Itera la lista con los libros y muestra al usuario el libro con id que
+	 * introduzca
 	 * 
 	 * @param listaLibros
 	 * @param idLibroAmostrar
@@ -102,6 +104,7 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 			JOptionPane.showMessageDialog(null, "No existe libro con id " + idLibroAmostrar);
 		}
 	}
+
 	@Override
 	public void createLibro(Connection conexionGenerada, List<LibroDto> listaLibros) {
 
@@ -125,7 +128,7 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 
 			// Verifica que la lista de los nuevos libros a registrar no esté vacía
 			if (!listaNuevosLibros.isEmpty()) {
-				//Consulta a la bbdd con los valores parametrizados --> ?
+				// Consulta a la bbdd con los valores parametrizados --> ?
 				String query = "INSERT INTO gbp_almacen.gbp_alm_cat_libros (titulo, autor, isbn, edicion) VALUES (?,?,?,?)";
 				// Consulta preparada con los 4 campos del nuevo libro a registrar
 				PreparedStatement consultaPreparada = conexionGenerada.prepareStatement(query);
@@ -148,17 +151,19 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 			conexionGenerada.close(); // Liberando recursos cerrando la conexion a bbdd
 		} catch (SQLException e) {
 			System.out.println(
-					"**ERROR OperacionesBbddImpl createLibros** Error generando o ejecutando la declaración SQL: "
+					"**ERROR OperacionesBbddImpl createLibro** Error generando o ejecutando la declaración SQL: "
 							+ e.getMessage());
 			e.printStackTrace();
 
 		} catch (NumberFormatException nfe) {
-			System.out.println("**ERROR OperacionesBbddImpl createLibros** Error al convertir una edición a entero: "
+			System.out.println("**ERROR OperacionesBbddImpl createLibro** Error al convertir una edición a entero: "
 					+ nfe.getMessage());
 			nfe.printStackTrace();
 
 		} catch (HeadlessException he) {
-			System.out.println("**ERROR OperacionesBbddImpl createLibros** Error, el usuario no dispone de interfaz gráfica: " + he.getMessage());
+			System.out.println(
+					"**ERROR OperacionesBbddImpl createLibro** Error, el usuario no dispone de interfaz gráfica: "
+							+ he.getMessage());
 			he.printStackTrace();
 
 		}
@@ -171,17 +176,12 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 		mostarTodosLosLibros(listaLibros); // Muestra libros actuales para que pueda identificar cual modificar
 		boolean libroAmodificarEsValido = false;
 		Integer idLibroAmodificar;
+		
 		try {
 			idLibroAmodificar = Integer
 					.parseInt(JOptionPane.showInputDialog("Introduce el id del libro a modificar: "));
-
-			for (LibroDto libro : listaLibros) {
-				if (libro.getIdLibro() == idLibroAmodificar) {
-					libroAmodificarEsValido = true;
-					break;
-				}
-			}
-
+			libroAmodificarEsValido = compruebaIdLibro(listaLibros, idLibroAmodificar);
+			
 			if (libroAmodificarEsValido) {
 				PreparedStatement consultaPreparada = null;
 				String campoAmodificar = JOptionPane
@@ -192,11 +192,11 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 				switch (campoAmodificar) {
 
 				case "titulo":
-					
+
 					String nuevoTitulo = JOptionPane
 							.showInputDialog("Introduce el nuevo título del libro a modificar: ");
 					String queryModificarTitulo = "UPDATE gbp_almacen.gbp_alm_cat_libros SET titulo = ? WHERE id_libro = ?";
-					consultaPreparada = conexionGenerada.prepareStatement(queryModificarTitulo); 
+					consultaPreparada = conexionGenerada.prepareStatement(queryModificarTitulo);
 					consultaPreparada.setString(1, nuevoTitulo);
 					consultaPreparada.setInt(2, idLibroAmodificar);
 					consultaPreparada.executeUpdate();
@@ -205,7 +205,7 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 					String nuevoAutor = JOptionPane.showInputDialog("Introduce el nuevo autor del libro a modificar: ");
 					String queryModificarAutor = "UPDATE gbp_almacen.gbp_alm_cat_libros SET autor = ? WHERE id_libro = ?";
 					consultaPreparada = conexionGenerada.prepareStatement(queryModificarAutor);
-					consultaPreparada.setString(1, nuevoAutor); 
+					consultaPreparada.setString(1, nuevoAutor);
 					consultaPreparada.setInt(2, idLibroAmodificar);
 					consultaPreparada.executeUpdate();
 					break;
@@ -213,16 +213,16 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 					String nuevoISBN = JOptionPane.showInputDialog("Introduce el nuevo ISBN del libro a modificar: ");
 					String queryModificarISBN = "UPDATE gbp_almacen.gbp_alm_cat_libros SET isbn = ? WHERE id_libro = ?";
 					consultaPreparada = conexionGenerada.prepareStatement(queryModificarISBN);
-					consultaPreparada.setString(1, nuevoISBN); 
+					consultaPreparada.setString(1, nuevoISBN);
 					consultaPreparada.setInt(2, idLibroAmodificar);
 					consultaPreparada.executeUpdate();
 					break;
 				case "edicion":
-					int nuevaEdicion = Integer
-							.parseInt(JOptionPane.showInputDialog("Introduce la nueva edición del libro a modificar: "));
+					int nuevaEdicion = Integer.parseInt(
+							JOptionPane.showInputDialog("Introduce la nueva edición del libro a modificar: "));
 					String queryModificarEdicion = "UPDATE gbp_almacen.gbp_alm_cat_libros SET edicion = ? WHERE id_libro = ?";
 					consultaPreparada = conexionGenerada.prepareStatement(queryModificarEdicion);
-					consultaPreparada.setInt(1, nuevaEdicion); 
+					consultaPreparada.setInt(1, nuevaEdicion);
 					consultaPreparada.setInt(2, idLibroAmodificar);
 					consultaPreparada.executeUpdate();
 					break;
@@ -237,35 +237,91 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 						"Libro con id " + idLibroAmodificar + " no encontrado en el sistema");
 			}
 			conexionGenerada.close(); // Liberando recursos cerrando la conexion a bbdd
-		} catch (SQLException sqle) {			
+		} catch (SQLException sqle) {
 			System.out.println(
-					"**ERROR OperacionesBbddImpl createLibros** Error generando o ejecutando la declaración SQL: "
+					"**ERROR OperacionesBbddImpl updateLibro** Error generando o ejecutando la declaración SQL: "
 							+ sqle.getMessage());
 			sqle.printStackTrace();
 		} catch (NumberFormatException nfe) {
-			System.out.println("**ERROR OperacionesBbddImpl createLibros** Error al convertir una edición a entero: "
+			System.out.println("**ERROR OperacionesBbddImpl updateLibro** Error al convertir una edición a entero: "
 					+ nfe.getMessage());
 			nfe.printStackTrace();
 		} catch (HeadlessException he) {
-			System.out.println("**ERROR OperacionesBbddImpl createLibros** Error, el usuario no dispone de interfaz gráfica: " + he.getMessage());
+			System.out.println(
+					"**ERROR OperacionesBbddImpl updateLibro** Error, el usuario no dispone de interfaz gráfica: "
+							+ he.getMessage());
 			he.printStackTrace();
 		}
 
 	}
 
 	@Override
-	public List<LibroDto> deleteLibro(Connection conexionGenerada) {
-		return null;
+	public void deleteLibro(Connection conexionGenerada, List<LibroDto> listaLibros) {
+
+		listaLibros = cargaListaLibrosActuales(conexionGenerada, listaLibros);
+		mostarTodosLosLibros(listaLibros); // Muestra libros actuales para que pueda identificar cual eliminar
+		boolean libroAeliminarEsValido = false;
+		Integer idLibroAeliminar;
+
+		try {
+			idLibroAeliminar = Integer.parseInt(JOptionPane.showInputDialog("Introduce el id del libro a eliminar: "));
+			libroAeliminarEsValido = compruebaIdLibro(listaLibros, idLibroAeliminar);
+
+			if (libroAeliminarEsValido) {
+				PreparedStatement consultaPreparada = null;
+				String queryEliminar = "DELETE FROM gbp_almacen.gbp_alm_cat_libros WHERE id_libro = ?";
+				consultaPreparada = conexionGenerada.prepareStatement(queryEliminar);
+				consultaPreparada.setInt(1, idLibroAeliminar);
+				int borrado = consultaPreparada.executeUpdate();
+				if (borrado > 0) {
+					JOptionPane.showMessageDialog(null, "Registro eliminado correctamente");
+				} else {
+					JOptionPane.showMessageDialog(null, "No se ha eliminado nada");
+				}
+			}
+		} catch (SQLException sqle) {
+			System.out.println(
+					"**ERROR OperacionesBbddImpl deleteLibros** Error generando o ejecutando la declaración SQL: "
+							+ sqle.getMessage());
+			sqle.printStackTrace();
+		} catch (NumberFormatException nfe) {
+			System.out.println("**ERROR OperacionesBbddImpl deleteLibro** Error al convertir una edición a entero: "
+					+ nfe.getMessage());
+			nfe.printStackTrace();
+		} catch (HeadlessException he) {
+			System.out.println(
+					"**ERROR OperacionesBbddImpl deleteLibro** Error, el usuario no dispone de interfaz gráfica: "
+							+ he.getMessage());
+			he.printStackTrace();
+		}
+
 	}
 
-	
 	/**
-	 * Método encargado de cargar la lista para trabajar con los libros actuales registrados en su respectiva tabla de la bbdd
+	 * Comprueba el id introducido por el usuario existe en la bbdd
+	 * 
+	 * @param listaLibros
+	 * @param idLibroAeliminar
+	 * @return
+	 */
+	private boolean compruebaIdLibro(List<LibroDto> listaLibros, int idLibroAeliminar) {
+		for (LibroDto libro : listaLibros) {
+			if (libro.getIdLibro() == idLibroAeliminar) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Método que realiza una consulta en BBDD y carga todos los libros en la lista
+	 * para poder trabajar con ellos
+	 * 
 	 * @param conexionGenerada
 	 * @param listaLibros
-	 * @return 
+	 * @return
 	 */
-	private List<LibroDto> cargaListaLibrosActuales(Connection conexionGenerada, List<LibroDto>listaLibros) {
+	private List<LibroDto> cargaListaLibrosActuales(Connection conexionGenerada, List<LibroDto> listaLibros) {
 		Statement declaracionSQL = null;
 		ResultSet resultadoConsulta = null;
 		ADto adto = new ADto();
@@ -279,19 +335,21 @@ public class OperacionesBbddImpl implements OperacionesBbddInterface {
 
 			// Llamada a la conversión a LibroDTO y añadido en su lista
 			listaLibros = adto.pasarResultSetALibrosDto(resultadoConsulta);
-			
+
 			// Liberando los recursos
 			resultadoConsulta.close();
 			declaracionSQL.close();
-			System.out.println("**INFO OperacionesBbddImpl cargaListaLibrosActuales** Cierre conexión a bbdd, statement y resulset");
+			System.out.println(
+					"**INFO OperacionesBbddImpl cargaListaLibrosActuales** Cierre conexión a bbdd, statement y resulset");
 
 		} catch (SQLException sqle) {
 			System.out.println(
-					"**ERROR OperacionesBbddImpl cargaListaLibrosActuales** Error generando o ejecutando la declaracionSQL: " + sqle);
+					"**ERROR OperacionesBbddImpl cargaListaLibrosActuales** Error generando o ejecutando la declaracionSQL: "
+							+ sqle);
 			sqle.printStackTrace();
-		} 
+		}
 		return listaLibros;
-		 
+
 	}
 
 }

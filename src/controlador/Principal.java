@@ -47,12 +47,13 @@ public class Principal {
 						operacionBbdd.updateLibro(conexion,listaLibros);
 						break;
 					case 4:
+						operacionBbdd.deleteLibro(conexion, listaLibros);
 						break;
 					case 0:
 						cerrarMenu = true;
 						break;
 					case -1:
-						cerrarMenu = true; //Boton cancelar en el menu
+						cerrarMenu = true; //Caso para cerrar la aplicación con botón cancelar en el menu
 						break;
 					}
 				}

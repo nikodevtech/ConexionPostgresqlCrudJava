@@ -32,5 +32,5 @@ public interface OperacionesBbddInterface {
 	 * @param conexionGenerada
 	 * @param listaLibros actuales
 	 */
-	public List<LibroDto> deleteLibro(Connection conexionGenerada);
+	public void deleteLibro(Connection conexionGenerada, List<LibroDto>listaLibros);
 }
